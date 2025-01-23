@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Entry</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #1e293b, #3b82f6);
+            font-family: 'Inter', sans-serif;
+            color: #fff;
+        }
+        
+        .entry-container {
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        .entry-container input {
+            width: 300px;
+            padding: 15px;
+            border: 2px solid #3b82f6;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        .entry-container input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+        }
+        
+        .entry-container button {
+            margin-top: 15px;
+            padding: 12px 25px;
+            background: #3b82f6;
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+        
+        .entry-container button:hover {
+            background: #2563eb;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="entry-container">
+        <form id="secureForm" method="POST" action="/submit">
+            <input type="text" name="entry" id="entry" placeholder="Enter something..." required>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById('secureForm');
+
+        form.addEventListener('submit', async(event) => {
+            event.preventDefault();
+            const entryValue = document.getElementById('entry').value;
+
+            if (/['";--]/.test(entryValue)) {
+                alert('Invalid input detected!');
+                return;
+            }
+
+            // Simulate server submission (replace with actual server logic)
+            alert('Input submitted securely: ' + entryValue);
+        });
+    </script>
+</body>
+
+</html>
